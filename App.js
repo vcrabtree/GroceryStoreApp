@@ -60,13 +60,13 @@ export default function App() {
             if (route.name === 'Home') {
               iconName = focused
                 ? 'ios-cart'
-                : 'ios-cart-outline'
+                : 'ios-cart'
             } else if (route.name === 'All Items') {
               iconName = focused ? 'ios-list-box' : 'ios-list';
             } else if (route.name === 'Search') {
-              iconName = focused ? 'ios-search' : 'ios-search-outline'
+              iconName = focused ? 'ios-search' : 'ios-search'
             } else if (route.name === 'Locate') {
-              iconName = focused ? 'ios-navigate' : 'ios-navigate-outline'
+              iconName = focused ? 'ios-navigate' : 'ios-navigate'
             } else if (route.name === 'My Lists') {
               iconName = focused ? 'ios-checkbox' : 'ios-checkbox-outline'
             }
