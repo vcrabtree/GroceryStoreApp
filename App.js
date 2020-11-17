@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -7,7 +7,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // react-native-vector-icons/Ionicons otherwise.
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function HomeScreen({navigation}) {
+function UselessTextInput(props) {
+  return (
+    <TextInput
+      {...props}
+      style={{ height: 30, borderWidth: 1, padding: 6, paddingTop: 10, margin: 5, color: 'midnightblue', borderColor: '#A5C9FA', backgroundColor: "oldlace", }}
+      editable
+      maxLength={30}
+    />
+  );
+}
+
+function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home Screen</Text>
@@ -15,7 +26,7 @@ function HomeScreen({navigation}) {
   );
 }
 
-function ItemsScreen({navigation}) {
+function ItemsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Items Screen</Text>
@@ -23,15 +34,73 @@ function ItemsScreen({navigation}) {
   );
 }
 
-function SearchScreen({navigation}) {
+function SearchScreen({ navigation }) {
+  const [nameInput, setNameInput] = useState('');
+  const [itemNoInput, setItemNoInput] = useState('');
+  const [categoryInput, setCategoryInput] = useState('');
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Search Screen</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen" }}>
+      <Text style={styles.heading1}>GROCERY STORE</Text>
+      <Text style={styles.heading2}>Advanced Search</Text>
+      <View style={{
+        flex: 0,
+        flexDirection: 'column',
+        justifyContent: 'space-between', width: 250, height: 450, backgroundColor: 'olivedrab', padding: 20,
+      }}>
+        <Text style={styles.searchText}>Name:</Text>
+        <UselessTextInput
+          multiline
+          numberOfLines={4}
+          value={setNameInput}
+          onChangeText={itemText => setNameInput(itemText)}
+        />
+        <Text style={styles.searchText}>Item No.:</Text>
+        <UselessTextInput
+          multiline
+          numberOfLines={4}
+          value={setItemNoInput}
+          onChangeText={itemText => setItemNoInput(itemText)}
+        />
+        {/* change to drop down */}
+
+        <Text style={styles.searchText}>Category:</Text>
+        <UselessTextInput
+          multiline
+          numberOfLines={4}
+          value={setCategoryInput}
+          onChangeText={itemText => setCategoryInput(itemText)}
+        />
+        <View />
+        <Text style={styles.searchText}>Price Range:</Text>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <TextInput placeholder="$" style={{ justifyContent: 'flex-start', }} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <TextInput placeholder="$" style={{ justifyContent: 'flex-end', }} />
+          </View>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <TextInput placeholder="$" style={{ justifyContent: 'flex-end', }} />
+          </View>
+          {/* change to radio button */}
+          <Text style={styles.searchText2}>Only show the items available</Text>
+        </View>
+      </View>
+      <View>
+        <TouchableOpacity
+          // onPress={alertAdd}
+          style={styles.button2}>
+          <Text style={styles.textButton}>Search</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
-function LocateScreen({navigation}) {
+function LocateScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Locate Screen</Text>
@@ -39,7 +108,7 @@ function LocateScreen({navigation}) {
   );
 }
 
-function ListScreen({navigation}) {
+function ListScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>List Screen</Text>
@@ -89,3 +158,63 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightcyan'
+  },
+  heading2: {
+    fontSize: 28,
+    color: "lightyellow",
+    fontFamily: "Cochin",
+    marginBottom: 10,
+  },
+  heading1: {
+    fontSize: 30,
+    color: "papayawhip",
+    fontFamily: "Cochin",
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 3.5,
+    borderColor:"papayawhip",
+  },
+  searchText: {
+    fontSize: 20,
+    color: "lightpink",
+    fontFamily: "Cochin",
+  },
+  searchText2: {
+    fontSize: 15,
+    color: "lightpink",
+    fontFamily: "Cochin",
+  },
+  button2: {
+    textAlign: "center",
+    marginTop: 20,
+    paddingTop: 15,
+    // borderRadius: 10,
+    // borderWidth: 1,
+    backgroundColor: 'pink',
+    padding: 12,
+    // borderWidth: 0.5,
+    borderRadius: (65 / 2),
+    width: 95,
+    height: 45,
+    shadowColor: 'rgba(0, 0, 0, 0.2)',
+    shadowOpacity: 0.9,
+    elevation: 6,
+    shadowRadius: 15 ,
+    shadowOffset : { width: 1, height: 13},
+    
+  },
+  textButton: {
+    textAlign: 'center',
+    fontSize: 12,
+  },
+
+
+})
