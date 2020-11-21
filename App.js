@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -20,8 +20,15 @@ function UselessTextInput(props) {
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home Screen</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen" }}>
+      <Text>{'\n'}</Text>
+      <Image source={require('./assets/JIVLogo.jpg')} style={{width: 300, height:300}} />
+      <Text>{'\n'}</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('All Items')}
+        style={styles.homeButton}>
+        <Text style={styles.homeButtonText}>Check Out Our{'\n'}Available Items!</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -145,7 +152,7 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#3066BE',
+          activeTintColor: 'olivedrab',
           inactiveTintColor: 'gray',
         }}
       >
@@ -215,6 +222,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
   },
-
-
+  homeButton: {
+    textAlign: "center",
+    marginTop: 20,
+    paddingTop: 15,
+    backgroundColor: 'pink',
+    padding: 12,
+    borderRadius: (65 / 2),
+    width: 150,
+    height: 60,
+    shadowColor: 'rgba(0, 0, 0, 0.2)',
+    shadowOpacity: 0.9,
+    elevation: 6,
+    shadowRadius: 15 ,
+    shadowOffset : { width: 1, height: 13},
+    
+  },
+  homeButtonText: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontFamily: "Cochin",
+    color: '#333333',
+  }
 })
