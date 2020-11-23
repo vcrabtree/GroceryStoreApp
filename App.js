@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -34,9 +34,34 @@ function HomeScreen({ navigation }) {
 }
 
 function ItemsScreen({ navigation }) {
+  const [data] = useState([
+    {
+      groceryItem: 'Apples'
+    },
+    {
+      groceryItem: 'Pear'
+    },
+    {
+      groceryItem: 'Bananas'
+    },
+    {
+      groceryItem: 'Carrot'
+    },
+    {
+      groceryItem: 'Lettuce'
+    }
+  ]);
+
+  const renderItem = ({ item }) => (
+    <View style={styles.listItem}>
+      <Text>{item.groceryItem}</Text>
+    </View>
+  );
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Items Screen</Text>
+      <Text>My List Items</Text>
+      <FlatList data={data} renderItem={renderItem} keyExtractor={item => item.id}/>
     </View>
   );
 }
@@ -243,5 +268,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Cochin",
     color: '#333333',
-  }
+  },
+  listItem: {
+    backgroundColor: 'yellowgreen',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
 })
