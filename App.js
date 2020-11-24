@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, } from 'react-native';
+import { Checkbox } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -22,7 +23,7 @@ function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen" }}>
       <Text>{'\n'}</Text>
-      <Image source={require('./assets/JIVLogo.jpg')} style={{width: 300, height:300}} />
+      <Image source={require('./assets/logo.gif')} style={{ width: 130, height: 200 }} />
       <Text>{'\n'}</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate('All Items')}
@@ -34,34 +35,96 @@ function HomeScreen({ navigation }) {
 }
 
 function ItemsScreen({ navigation }) {
-  const [data] = useState([
+
+  const ItemView = ({ item }) => {
+    return (
+      <View style={styles.listItem}>
+        <View style={{ flex: 1 }}>
+          <Image
+            source={item.src}
+            style={styles.itemImage}
+          />
+        </View>
+        <Text style={styles.itemTextStyle} onPress={() => getItem(item)}>{item.groceryItem}</Text>
+      </View>
+    );
+  };
+
+  const ItemSeparatorView = () => {
+    return (
+      <View style={styles.fList} />
+    );
+  };
+
+  const getItem = (item) => {
+    Alert.alert('Item: ' + item.groceryItem + '\n' + 'Price: ' + item.price + '\n' + 'Category: ' + item.category + '\n' + 'Item #: ' + item.id + '\n')
+  };
+
+
+  const data = [
     {
-      groceryItem: 'Apples'
+      groceryItem: 'Apple',
+      price: '$2.99',
+      category: 'Produce',
+      src: require('./assets/apples.jpg'),
+      id: Math.floor(Math.random() * 100) + 1
     },
     {
-      groceryItem: 'Pear'
+      groceryItem: 'Pear',
+      price: '$2.00',
+      category: 'Produce',
+      src: require('./assets/pear.jpg'),
+      id: Math.floor(Math.random() * 100) + 1
     },
     {
-      groceryItem: 'Bananas'
+      groceryItem: 'Banana',
+      price: '$1.00',
+      category: 'Produce',
+      src: require('./assets/banana.jpg'),
+      id: Math.floor(Math.random() * 100) + 1
     },
     {
-      groceryItem: 'Carrot'
+      groceryItem: 'Carrot',
+      price: '$2.50',
+      category: 'Produce',
+      src: require('./assets/carrot.jpg'),
+      id: Math.floor(Math.random() * 100) + 1
     },
     {
-      groceryItem: 'Lettuce'
+      groceryItem: 'Lettuce',
+      price: '$3.99',
+      category: 'Produce',
+      src: require('./assets/lettuce.jpg'),
+      id: Math.floor(Math.random() * 100) + 1
+    },
+    {
+      groceryItem: 'Milk',
+      price: '$2.99',
+      category: 'Dairy',
+      src: require('./assets/milk.jpg'),
+      id: Math.floor(Math.random() * 100) + 1
     }
-  ]);
+  ];
 
   const renderItem = ({ item }) => (
     <View style={styles.listItem}>
+      <Image
+        source={{ uri: item.src }}
+        style={{ width: 40, height: 40 }}
+      />
       <Text>{item.groceryItem}</Text>
     </View>
   );
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>My List Items</Text>
-      <FlatList data={data} renderItem={renderItem} keyExtractor={item => item.id}/>
+    <View style={styles.container2}>
+      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+      <Text style={styles.heading2}>Groceries</Text>
+      <FlatList
+        data={data}
+        ItemSeparatorComponent={ItemSeparatorView}
+        renderItem={ItemView}
+        keyExtractor={item => item.id} />
     </View>
   );
 }
@@ -71,9 +134,24 @@ function SearchScreen({ navigation }) {
   const [itemNoInput, setItemNoInput] = useState('');
   const [categoryInput, setCategoryInput] = useState('');
 
+  const [checked, setChecked] = React.useState(false);
+
+
+  //const [exampleArray, setExampleArray] = useState(data);
+
+  const searchItem = (userItem) => {
+    navigation.navigate('SearchScreen', { post: JSON.stringify({ text: nameInput, }) });
+    if (nameInput == "") {
+      Alert.alert("Input is empty.");
+    } else {
+      const itemToSearch = itemsList.filter(item => item.includes(userItem));
+      Alert.alert("Item " + itemToSearch + " has been found.");
+    }
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen" }}>
-      <Text style={styles.heading1}>GROCERY STORE</Text>
+      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
       <Text style={styles.heading2}>Advanced Search</Text>
       <View style={{
         flex: 0,
@@ -84,14 +162,14 @@ function SearchScreen({ navigation }) {
         <UselessTextInput
           multiline
           numberOfLines={4}
-          value={setNameInput}
+          value={nameInput}
           onChangeText={itemText => setNameInput(itemText)}
         />
         <Text style={styles.searchText}>Item No.:</Text>
         <UselessTextInput
           multiline
           numberOfLines={4}
-          value={setItemNoInput}
+          value={itemNoInput}
           onChangeText={itemText => setItemNoInput(itemText)}
         />
         {/* change to drop down */}
@@ -100,33 +178,40 @@ function SearchScreen({ navigation }) {
         <UselessTextInput
           multiline
           numberOfLines={4}
-          value={setCategoryInput}
+          value={categoryInput}
           onChangeText={itemText => setCategoryInput(itemText)}
         />
         <View />
         <Text style={styles.searchText}>Price Range:</Text>
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: 1 }}>
-            <TextInput placeholder="$" style={{ justifyContent: 'flex-start', }} />
+            <TextInput placeholder="$" placeholderTextColor={'white'} style={{ justifyContent: 'flex-start', color: "pink" }} />
           </View>
           <View style={{ flex: 1 }}>
-            <TextInput placeholder="$" style={{ justifyContent: 'flex-end', }} />
+            <TextInput placeholder="$" placeholderTextColor={'white'} style={{ justifyContent: 'flex-end', }} />
           </View>
         </View>
         <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <TextInput placeholder="$" style={{ justifyContent: 'flex-end', }} />
+          <View style={{ flex: 1, backgroundColor:"oldlace", height:35, width:10}}>
+            <Checkbox
+              status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setChecked(!checked);
+              }}
+              uncheckedColor="white"
+              color="red"
+            />
           </View>
-          {/* change to radio button */}
-          <Text style={styles.searchText2}>Only show the items available</Text>
+          <Text style={styles.searchText2}>Show items available</Text>
         </View>
       </View>
       <View>
         <TouchableOpacity
-          // onPress={alertAdd}
+          onPress={searchItem}
           style={styles.button2}>
           <Text style={styles.textButton}>Search</Text>
         </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -134,16 +219,18 @@ function SearchScreen({ navigation }) {
 
 function LocateScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Locate Screen</Text>
+    <View style={styles.container2}>
+      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+      <Text style={styles.heading2}>Locate Screen</Text>
     </View>
   );
 }
 
 function ListScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>List Screen</Text>
+    <View style={styles.container2}>
+      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+      <Text style={styles.heading2}>List Screen</Text>
     </View>
   );
 }
@@ -198,6 +285,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'lightcyan'
   },
+  container2: {
+    backgroundColor: 'yellowgreen',
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingTop: 90,
+    flex: 1
+  },
   heading2: {
     fontSize: 28,
     color: "lightyellow",
@@ -212,7 +306,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     borderWidth: 3.5,
-    borderColor:"papayawhip",
+    borderColor: "papayawhip",
+    paddingLeft: 30
   },
   searchText: {
     fontSize: 20,
@@ -223,6 +318,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "lightpink",
     fontFamily: "Cochin",
+    marginLeft:40,
+    paddingTop:10
   },
   button2: {
     textAlign: "center",
@@ -239,9 +336,9 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.2)',
     shadowOpacity: 0.9,
     elevation: 6,
-    shadowRadius: 15 ,
-    shadowOffset : { width: 1, height: 13},
-    
+    shadowRadius: 15,
+    shadowOffset: { width: 1, height: 13 },
+
   },
   textButton: {
     textAlign: 'center',
@@ -259,9 +356,9 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.2)',
     shadowOpacity: 0.9,
     elevation: 6,
-    shadowRadius: 15 ,
-    shadowOffset : { width: 1, height: 13},
-    
+    shadowRadius: 15,
+    shadowOffset: { width: 1, height: 13 },
+
   },
   homeButtonText: {
     textAlign: 'center',
@@ -270,9 +367,44 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   listItem: {
-    backgroundColor: 'yellowgreen',
+    backgroundColor: 'lightyellow',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    flexDirection: "row",
   },
+  item: {
+    padding: 10,
+    color: '#F95904',
+    fontSize: 17,
+    height: 35,
+    textAlign: 'center',
+    fontFamily: 'Cochin',
+  },
+  fList: {
+    height: 0.5,
+    width: '100%',
+    backgroundColor: '#C3DCFF'
+
+  },
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  itemImage: {
+    height: 40,
+    width: 40,
+    justifyContent: 'flex-end',
+    borderRadius: 150 / 2,
+  },
+  itemTextStyle: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontFamily: "Cochin",
+    color: '#333333',
+    paddingTop: 10,
+    paddingRight: 40
+  },
+
 })
