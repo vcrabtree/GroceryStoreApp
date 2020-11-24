@@ -8,6 +8,53 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // react-native-vector-icons/Ionicons otherwise.
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+
+const data = [
+  {
+    groceryItem: 'Apple',
+    price: '$2.99',
+    category: 'Produce',
+    src: require('./assets/apples.jpg'),
+    id: Math.floor(Math.random() * 100) + 1
+  },
+  {
+    groceryItem: 'Pear',
+    price: '$2.00',
+    category: 'Produce',
+    src: require('./assets/pear.jpg'),
+    id: Math.floor(Math.random() * 100) + 1
+  },
+  {
+    groceryItem: 'Banana',
+    price: '$1.00',
+    category: 'Produce',
+    src: require('./assets/banana.jpg'),
+    id: Math.floor(Math.random() * 100) + 1
+  },
+  {
+    groceryItem: 'Carrot',
+    price: '$2.50',
+    category: 'Produce',
+    src: require('./assets/carrot.jpg'),
+    id: Math.floor(Math.random() * 100) + 1
+  },
+  {
+    groceryItem: 'Lettuce',
+    price: '$3.99',
+    category: 'Produce',
+    src: require('./assets/lettuce.jpg'),
+    id: Math.floor(Math.random() * 100) + 1
+  },
+  {
+    groceryItem: 'Milk',
+    price: '$2.99',
+    category: 'Dairy',
+    src: require('./assets/milk.jpg'),
+    id: Math.floor(Math.random() * 100) + 1
+  }
+];
+
+
 function UselessTextInput(props) {
   return (
     <TextInput
@@ -61,51 +108,7 @@ function ItemsScreen({ navigation }) {
   };
 
 
-  const data = [
-    {
-      groceryItem: 'Apple',
-      price: '$2.99',
-      category: 'Produce',
-      src: require('./assets/apples.jpg'),
-      id: Math.floor(Math.random() * 100) + 1
-    },
-    {
-      groceryItem: 'Pear',
-      price: '$2.00',
-      category: 'Produce',
-      src: require('./assets/pear.jpg'),
-      id: Math.floor(Math.random() * 100) + 1
-    },
-    {
-      groceryItem: 'Banana',
-      price: '$1.00',
-      category: 'Produce',
-      src: require('./assets/banana.jpg'),
-      id: Math.floor(Math.random() * 100) + 1
-    },
-    {
-      groceryItem: 'Carrot',
-      price: '$2.50',
-      category: 'Produce',
-      src: require('./assets/carrot.jpg'),
-      id: Math.floor(Math.random() * 100) + 1
-    },
-    {
-      groceryItem: 'Lettuce',
-      price: '$3.99',
-      category: 'Produce',
-      src: require('./assets/lettuce.jpg'),
-      id: Math.floor(Math.random() * 100) + 1
-    },
-    {
-      groceryItem: 'Milk',
-      price: '$2.99',
-      category: 'Dairy',
-      src: require('./assets/milk.jpg'),
-      id: Math.floor(Math.random() * 100) + 1
-    }
-  ];
-
+  
   const renderItem = ({ item }) => (
     <View style={styles.listItem}>
       <Image
@@ -137,15 +140,14 @@ function SearchScreen({ navigation }) {
   const [checked, setChecked] = React.useState(false);
 
 
-  //const [exampleArray, setExampleArray] = useState(data);
+  const [itemsList, setItemsList] = useState(data);
 
-  const searchItem = (userItem) => {
+  const searchItem = () => {
     navigation.navigate('SearchScreen', { post: JSON.stringify({ text: nameInput, }) });
     if (nameInput == "") {
       Alert.alert("Input is empty.");
-    } else {
-      const itemToSearch = itemsList.filter(item => item.includes(userItem));
-      Alert.alert("Item " + itemToSearch + " has been found.");
+    }else if (itemsList.filter(item => item.groceryItem == nameInput)){
+      Alert.alert("Item " + nameInput + " has been found.");
     }
   };
 
