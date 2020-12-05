@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, } from 'react-native';
+import MapView from 'react-native-maps';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, Dimensions } from 'react-native';
 import { Checkbox } from 'react-native-paper';
+import { Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // You can import Ionicons from @expo/vector-icons/Ionicons if you use Expo or
@@ -221,11 +224,56 @@ function SearchScreen({ navigation }) {
 
 function LocateScreen({ navigation }) {
   return (
-    <View style={styles.container2}>
+    <View style={{ flex: 1, alignItems: 'center', backgroundColor: "yellowgreen", paddingTop: 90 }}>
       <Text style={styles.heading1}>JIV'S GROCERIES</Text>
-      <Text style={styles.heading2}>Locate Screen</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Map')}>
+        <Text style={styles.heading2}>Find Us On The Map!</Text>
+      </TouchableOpacity>
     </View>
   );
+}
+
+function MapScreen({ navigation }) { 
+  const [myRegion, setRegion] = useState({
+    latitude: 42.46096759950416,   
+    longitude: -76.50325598116764,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
+    }
+  );
+const [markers, setMarkers] = useState([{
+latlng:{
+        latitude: 42.49196502655446,  
+        longitude: -76.52158509097018,
+       },
+  title:"JIV'S GROCERIES",
+  description:"The Best Groceries Around!",
+  pinColor: 'green',
+}]
+);
+
+const onRegionChange = (region) => {
+setRegion( region );
+}
+return (
+  <View style={styles.container}>
+    <MapView style={styles.mapStyle}
+       region={myRegion}
+       onRegionChange={onRegionChange}
+    >
+    {markers.map((marker, index) => (
+<Marker
+  key={index}
+  coordinate={marker.latlng}
+  title={marker.title}
+  description={marker.description}
+  pinColor={marker.pinColor}
+/>
+    ))}
+  </MapView>
+  </View>
+);
 }
 
 function ListScreen({ navigation }) {
@@ -234,6 +282,17 @@ function ListScreen({ navigation }) {
       <Text style={styles.heading1}>JIV'S GROCERIES</Text>
       <Text style={styles.heading2}>List Screen</Text>
     </View>
+  );
+}
+
+const LocateStack = createStackNavigator();
+
+function LocateStackScreen() {
+  return (
+    <LocateStack.Navigator>
+      <LocateStack.Screen name="Locate" component={LocateScreen} options={{headerShown: false}} />
+      <LocateStack.Screen name="Map" component={MapScreen} options={{headerShown: false}} />
+    </LocateStack.Navigator>
   );
 }
 
@@ -273,7 +332,7 @@ export default function App() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="All Items" component={ItemsScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Locate" component={LocateScreen} />
+        <Tab.Screen name="Locate" component={LocateStackScreen} />
         <Tab.Screen name="My Lists" component={ListScreen} />
       </Tab.Navigator>
     </NavigationContainer>
@@ -299,6 +358,7 @@ const styles = StyleSheet.create({
     color: "lightyellow",
     fontFamily: "Cochin",
     marginBottom: 10,
+    alignItems: 'center',
   },
   heading1: {
     fontSize: 30,
@@ -408,5 +468,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingRight: 40
   },
-
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
 })
