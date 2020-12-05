@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, Dimensions } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Marker } from 'react-native-maps';
