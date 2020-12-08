@@ -4,19 +4,18 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { removeItem } from './ItemsActions';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Keyboard,  TouchableWithoutFeedback, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-
 // You can import Ionicons from @expo/vector-icons/Ionicons if you use Expo or
 // react-native-vector-icons/Ionicons otherwise.
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 
 const data = [
   {
@@ -153,6 +152,7 @@ function SearchScreen({ navigation }) {
 
   const [itemsList, setItemsList] = useState(data);
 
+
   const searchItem = () => {
     navigation.navigate('SearchScreen', { post: JSON.stringify({ text: nameInput, }) });
     if (nameInput == "") {
@@ -162,7 +162,14 @@ function SearchScreen({ navigation }) {
     }
   };
 
+  const DismissKeyboard = ({ children }) => (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {children}
+    </TouchableWithoutFeedback>
+  );
+
   return (
+   <DismissKeyboard>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen" }}>
       <Text style={styles.heading1}>JIV'S GROCERIES</Text>
       <Text style={styles.heading2}>Advanced Search</Text>
@@ -241,6 +248,7 @@ function SearchScreen({ navigation }) {
 
       </View>
     </View>
+    </DismissKeyboard>
   );
 }
 
@@ -299,6 +307,13 @@ function MapScreen({ navigation }) {
 }
 
 function ListScreen({ navigation }) {
+
+  const _onPressButton = (key, item) => {
+    Alert.alert('You clicked ' + item +'\n'+'with key ' + key);
+    props.removeItem(key);
+  }
+
+
   return (
     <View style={styles.container2}>
       <Text style={styles.heading1}>JIV'S GROCERIES</Text>
@@ -320,7 +335,7 @@ function LocateStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+export default function App(props) {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -517,4 +532,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});
+
+
+// const mapStateToProps = (state) => {
+//   const { items } = state
+//   return { items }
+// };
+
+// const mapDispatchToProps = dispatch => (
+//   bindActionCreators({
+//     removeItem,
+//   }, dispatch)
+// );
+
+// export default connect(mapStateToProps, mapDispatchToProps)(App);

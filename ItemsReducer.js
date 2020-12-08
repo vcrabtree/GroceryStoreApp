@@ -12,21 +12,21 @@ const INITIAL_STATE = {
     },
     {
       groceryItem: 'Pear',
-      price: '$2.00',
+      price: '$2.49',
       category: 'Produce',
       src: require('./assets/pear.jpg'),
       id: Math.floor(Math.random() * 100) + 1
     },
     {
       groceryItem: 'Banana',
-      price: '$1.00',
+      price: '$0.99',
       category: 'Produce',
       src: require('./assets/banana.jpg'),
       id: Math.floor(Math.random() * 100) + 1
     },
     {
       groceryItem: 'Carrot',
-      price: '$2.50',
+      price: '$2.49',
       category: 'Produce',
       src: require('./assets/carrot.jpg'),
       id: Math.floor(Math.random() * 100) + 1

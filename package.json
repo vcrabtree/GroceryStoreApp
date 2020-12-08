@@ -22,6 +22,7 @@
     "react-native-dropdown-picker": "^3.7.1",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-maps": "^0.27.1",
+    "react-native-material-dropdown": "^0.11.1",
     "react-native-paper": "^4.4.1",
     "react-native-paper-dropdown": "0.0.5",
     "react-native-picker": "^4.3.7",
