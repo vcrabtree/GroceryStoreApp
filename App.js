@@ -264,6 +264,9 @@ function LocateScreen({ navigation }) {
         onPress={() => navigation.navigate('Map')}>
         <Text style={styles.heading2}>Find Us On The Map!</Text>
       </TouchableOpacity>
+      <Text>{'\n'}</Text>
+      <Image source={require('./assets/storeMap.png')} style={{ width: 350, height: 350 }} />
+      <Text>{'\n'}</Text>
     </View>
   );
 }
