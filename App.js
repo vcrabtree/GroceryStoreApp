@@ -4,12 +4,14 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, Dimensions } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 // You can import Ionicons from @expo/vector-icons/Ionicons if you use Expo or
 // react-native-vector-icons/Ionicons otherwise.
@@ -26,21 +28,21 @@ const data = [
   },
   {
     groceryItem: 'Pear',
-    price: '$2.00',
+    price: '$2.49',
     category: 'Produce',
     src: require('./assets/pear.jpg'),
     id: Math.floor(Math.random() * 100) + 1
   },
   {
     groceryItem: 'Banana',
-    price: '$1.00',
+    price: '$0.99',
     category: 'Produce',
     src: require('./assets/banana.jpg'),
     id: Math.floor(Math.random() * 100) + 1
   },
   {
     groceryItem: 'Carrot',
-    price: '$2.50',
+    price: '$2.49',
     category: 'Produce',
     src: require('./assets/carrot.jpg'),
     id: Math.floor(Math.random() * 100) + 1
@@ -60,7 +62,6 @@ const data = [
     id: Math.floor(Math.random() * 100) + 1
   }
 ];
-
 
 function UselessTextInput(props) {
   return (
@@ -115,7 +116,6 @@ function ItemsScreen({ navigation }) {
   };
 
 
-  
   const renderItem = ({ item }) => (
     <View style={styles.listItem}>
       <Image
@@ -146,6 +146,10 @@ function SearchScreen({ navigation }) {
 
   const [checked, setChecked] = React.useState(false);
 
+  const [sliderValue, setSliderValue] = useState(15.49);
+
+  const [max, setMax] = useState(49.99);
+  const [min, setMin] = useState(0.99);
 
   const [itemsList, setItemsList] = useState(data);
 
@@ -153,7 +157,7 @@ function SearchScreen({ navigation }) {
     navigation.navigate('SearchScreen', { post: JSON.stringify({ text: nameInput, }) });
     if (nameInput == "") {
       Alert.alert("Input is empty.");
-    }else if (itemsList.filter(item => item.groceryItem == nameInput)){
+    } else if (itemsList.filter(item => item.groceryItem == nameInput)) {
       Alert.alert("Item " + nameInput + " has been found.");
     }
   };
@@ -181,27 +185,41 @@ function SearchScreen({ navigation }) {
           value={itemNoInput}
           onChangeText={itemText => setItemNoInput(itemText)}
         />
-        {/* change to drop down */}
-
-        <Text style={styles.searchText}>Category:</Text>
-        <UselessTextInput
-          multiline
-          numberOfLines={4}
-          value={categoryInput}
-          onChangeText={itemText => setCategoryInput(itemText)}
-        />
-        <View />
-        <Text style={styles.searchText}>Price Range:</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <TextInput placeholder="$" placeholderTextColor={'white'} style={{ justifyContent: 'flex-start', color: "pink" }} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <TextInput placeholder="$" placeholderTextColor={'white'} style={{ justifyContent: 'flex-end', }} />
-          </View>
+        <Text style={styles.searchText3}>Category:</Text>
+        <View style={styles.containerPicker}>
+          <Picker style={styles.pickerStyle}
+            selectedValue={categoryInput}
+            onValueChange={(itemValue) =>
+              setCategoryInput(itemValue)}
+            >
+            <Picker.Item label="Dairy" value="dairy" />
+            <Picker.Item label="Produce" value="produce" />
+            <Picker.Item label="Meat & Seafood" value="meats" />
+            <Picker.Item label="Beer & Wine" value="bw" />
+            <Picker.Item label="Condiments" value="con" />
+            <Picker.Item label="Candy & Snacks" value="cs" />
+            <Picker.Item label="Baking" value="bake" />
+          </Picker>
         </View>
+
+        <View />
+        <Text style={styles.searchText}>
+          Price : $ {sliderValue}
+        </Text>
+
+        <Slider
+          maximumValue={max}
+          minimumValue={min}
+          minimumTrackTintColor="#307ecc"
+          maximumTrackTintColor="#ffffff"
+          step={0.50}
+          value={sliderValue}
+          onValueChange={
+            (sliderValue) => setSliderValue(Math.round(sliderValue * 100) / 100)
+          }
+        />
         <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1, backgroundColor:"oldlace", height:35, width:10}}>
+          <View style={{ flex: 1, backgroundColor: "oldlace", height: 35, width: 10 }}>
             <Checkbox
               status={checked ? 'checked' : 'unchecked'}
               onPress={() => {
@@ -238,46 +256,46 @@ function LocateScreen({ navigation }) {
   );
 }
 
-function MapScreen({ navigation }) { 
+function MapScreen({ navigation }) {
   const [myRegion, setRegion] = useState({
-    latitude: 42.46096759950416,   
+    latitude: 42.46096759950416,
     longitude: -76.50325598116764,
     latitudeDelta: 0.1,
     longitudeDelta: 0.1,
-    }
+  }
   );
-const [markers, setMarkers] = useState([{
-latlng:{
-        latitude: 42.49196502655446,  
-        longitude: -76.52158509097018,
-       },
-  title:"JIV'S GROCERIES",
-  description:"The Best Groceries Around!",
-  pinColor: 'green',
-}]
-);
+  const [markers, setMarkers] = useState([{
+    latlng: {
+      latitude: 42.49196502655446,
+      longitude: -76.52158509097018,
+    },
+    title: "JIV'S GROCERIES",
+    description: "The Best Groceries Around!",
+    pinColor: 'green',
+  }]
+  );
 
-const onRegionChange = (region) => {
-setRegion( region );
-}
-return (
-  <View style={styles.container}>
-    <MapView style={styles.mapStyle}
-       region={myRegion}
-       onRegionChange={onRegionChange}
-    >
-    {markers.map((marker, index) => (
-<Marker
-  key={index}
-  coordinate={marker.latlng}
-  title={marker.title}
-  description={marker.description}
-  pinColor={marker.pinColor}
-/>
-    ))}
-  </MapView>
-  </View>
-);
+  const onRegionChange = (region) => {
+    setRegion(region);
+  }
+  return (
+    <View style={styles.container}>
+      <MapView style={styles.mapStyle}
+        region={myRegion}
+        onRegionChange={onRegionChange}
+      >
+        {markers.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={marker.latlng}
+            title={marker.title}
+            description={marker.description}
+            pinColor={marker.pinColor}
+          />
+        ))}
+      </MapView>
+    </View>
+  );
 }
 
 function ListScreen({ navigation }) {
@@ -294,8 +312,8 @@ const LocateStack = createStackNavigator();
 function LocateStackScreen() {
   return (
     <LocateStack.Navigator>
-      <LocateStack.Screen name="Locate" component={LocateScreen} options={{headerShown: false}} />
-      <LocateStack.Screen name="Map" component={MapScreen} options={{headerShown: false}} />
+      <LocateStack.Screen name="Locate" component={LocateScreen} options={{ headerShown: false }} />
+      <LocateStack.Screen name="Map" component={MapScreen} options={{ headerShown: false }} />
     </LocateStack.Navigator>
   );
 }
@@ -329,8 +347,10 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'olivedrab',
-          inactiveTintColor: 'gray',
+          activeTintColor: '#db86a3',
+          inactiveTintColor: '#6b1331',
+          activeBackgroundColor: 'pink',
+          inactiveBackgroundColor: 'pink'
         }}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
@@ -344,6 +364,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -380,12 +401,18 @@ const styles = StyleSheet.create({
     color: "lightpink",
     fontFamily: "Cochin",
   },
+  searchText3: {
+    fontSize: 20,
+    color: "lightpink",
+    fontFamily: "Cochin",
+    marginBottom: 50,
+  },
   searchText2: {
     fontSize: 15,
     color: "lightpink",
     fontFamily: "Cochin",
-    marginLeft:40,
-    paddingTop:10
+    marginLeft: 40,
+    paddingTop: 10
   },
   button2: {
     textAlign: "center",
@@ -430,7 +457,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     fontFamily: "Cochin",
-    color: '#333333',
+    color: '#6b1331',
   },
   listItem: {
     backgroundColor: 'lightyellow',
@@ -475,5 +502,19 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  pickerStyle: {
+    height: 50,
+    width: "80%",
+    color: '#344953',
+    justifyContent: 'center',
+    marginTop:50,
+    marginBottom:90,
+    fontSize:20
+  },
+  containerPicker: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
