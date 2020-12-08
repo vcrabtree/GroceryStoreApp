@@ -20,7 +20,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-dropdown-picker": "^3.7.1",
-    "react-native-gesture-handler": "~1.7.0",
+    "react-native-gesture-handler": "^1.9.0",
     "react-native-maps": "^0.27.1",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-paper": "^4.4.1",
@@ -29,6 +29,7 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-smooth-slider": "^1.2.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5"

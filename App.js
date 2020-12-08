@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { removeItem } from './ItemsActions';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Keyboard,  TouchableWithoutFeedback, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Keyboard, SafeAreaView, ScrollView, TouchableWithoutFeedback, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
@@ -127,7 +127,7 @@ function ItemsScreen({ navigation }) {
 
   return (
     <View style={styles.container2}>
-      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+      <Text style={styles.heading11}>JIV'S GROCERIES</Text>
       <Text style={styles.heading2}>Groceries</Text>
       <FlatList
         data={data}
@@ -155,100 +155,104 @@ function SearchScreen({ navigation }) {
 
   const searchItem = () => {
     navigation.navigate('SearchScreen', { post: JSON.stringify({ text: nameInput, }) });
-    if (nameInput == "") {
-      Alert.alert("Input is empty.");
+    if (nameInput == "" || itemNoInput == "") {
+      Alert.alert("At least an input is empty.");
     } else if (itemsList.filter(item => item.groceryItem == nameInput)) {
       Alert.alert("Item " + nameInput + " has been found.");
     }
   };
 
-  const DismissKeyboard = ({ children }) => (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      {children}
-    </TouchableWithoutFeedback>
-  );
+  // const DismissKeyboard = ({ children }) => (
+  //   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+  //     {children}
+  //   </TouchableWithoutFeedback>
+  // );
 
   return (
-   <DismissKeyboard>
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen" }}>
-      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
-      <Text style={styles.heading2}>Advanced Search</Text>
-      <View style={{
-        flex: 0,
-        flexDirection: 'column',
-        justifyContent: 'space-between', width: 250, height: 450, backgroundColor: 'olivedrab', padding: 20,
-      }}>
-        <Text style={styles.searchText}>Name:</Text>
-        <UselessTextInput
-          multiline
-          numberOfLines={4}
-          value={nameInput}
-          onChangeText={itemText => setNameInput(itemText)}
-        />
-        <Text style={styles.searchText}>Item No.:</Text>
-        <UselessTextInput
-          multiline
-          numberOfLines={4}
-          value={itemNoInput}
-          onChangeText={itemText => setItemNoInput(itemText)}
-        />
-        <Text style={styles.searchText3}>Category:</Text>
-        <View style={styles.containerPicker}>
-          <Picker style={styles.pickerStyle}
-            selectedValue={categoryInput}
-            onValueChange={(itemValue) =>
-              setCategoryInput(itemValue)}
-            >
-            <Picker.Item label="Dairy" value="dairy" />
-            <Picker.Item label="Produce" value="produce" />
-            <Picker.Item label="Meat & Seafood" value="meats" />
-            <Picker.Item label="Beer & Wine" value="bw" />
-            <Picker.Item label="Condiments" value="con" />
-            <Picker.Item label="Candy & Snacks" value="cs" />
-            <Picker.Item label="Baking" value="bake" />
-          </Picker>
-        </View>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen", paddingTop: 70 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps={'always'}>
+        <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+        <Text style={styles.heading2}>Advanced Search</Text>
+        <View style={{
+          flex: 0,
+          flexDirection: 'column',
+          justifyContent: 'space-between', width: 250, height: 450, backgroundColor: 'olivedrab', padding: 20,
+        }}>
 
-        <View />
-        <Text style={styles.searchText}>
-          Price : $ {sliderValue}
-        </Text>
-
-        <Slider
-          maximumValue={max}
-          minimumValue={min}
-          minimumTrackTintColor="#307ecc"
-          maximumTrackTintColor="#ffffff"
-          step={0.50}
-          value={sliderValue}
-          onValueChange={
-            (sliderValue) => setSliderValue(Math.round(sliderValue * 100) / 100)
-          }
-        />
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1, backgroundColor: "oldlace", height: 35, width: 10 }}>
-            <Checkbox
-              status={checked ? 'checked' : 'unchecked'}
-              onPress={() => {
-                setChecked(!checked);
-              }}
-              uncheckedColor="white"
-              color="red"
+            <Text style={styles.searchText}>Name:</Text>
+            <UselessTextInput
+              multiline
+              numberOfLines={4}
+              value={nameInput}
+              onChangeText={itemText => setNameInput(itemText)}
             />
-          </View>
-          <Text style={styles.searchText2}>Show items available</Text>
-        </View>
-      </View>
-      <View>
-        <TouchableOpacity
-          onPress={searchItem}
-          style={styles.button2}>
-          <Text style={styles.textButton}>Search</Text>
-        </TouchableOpacity>
+            <Text style={styles.searchText}>Item No.:</Text>
+            <UselessTextInput
+              keyboardType='numeric'
+              multiline
+              numberOfLines={4}
+              value={itemNoInput}
+              onChangeText={itemText => setItemNoInput(itemText)}
+            />
+            <Text style={styles.searchText3}>Category:</Text>
+            <View style={styles.containerPicker}>
+              <Picker style={styles.pickerStyle}
+                selectedValue={categoryInput}
+                onValueChange={(itemValue) =>
+                  setCategoryInput(itemValue)}
+              >
+                <Picker.Item label="Dairy" value="dairy" />
+                <Picker.Item label="Produce" value="produce" />
+                <Picker.Item label="Meat & Seafood" value="meats" />
+                <Picker.Item label="Beer & Wine" value="bw" />
+                <Picker.Item label="Condiments" value="con" />
+                <Picker.Item label="Candy & Snacks" value="cs" />
+                <Picker.Item label="Baking" value="bake" />
+              </Picker>
+            </View>
 
-      </View>
+          <View />
+          <Text style={styles.searchText}>
+            Price : $ {sliderValue}
+          </Text>
+
+          <Slider
+            maximumValue={max}
+            minimumValue={min}
+            minimumTrackTintColor="#307ecc"
+            maximumTrackTintColor="#ffffff"
+            step={0.50}
+            value={sliderValue}
+            onValueChange={
+              (sliderValue) => setSliderValue(Math.round(sliderValue * 100) / 100)
+            }
+          />
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 1, backgroundColor: "oldlace", height: 35, width: 10 }}>
+              <Checkbox
+                status={checked ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setChecked(!checked);
+                }}
+                uncheckedColor="white"
+                color="red"
+              />
+            </View>
+            <Text style={styles.searchText2}>Show items available</Text>
+          </View>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={searchItem}
+            style={styles.button2}>
+            <Text style={styles.textButton}>Search</Text>
+          </TouchableOpacity>
+
+        </View>
+      </ScrollView>
     </View>
-    </DismissKeyboard>
   );
 }
 
@@ -309,7 +313,7 @@ function MapScreen({ navigation }) {
 function ListScreen({ navigation }) {
 
   const _onPressButton = (key, item) => {
-    Alert.alert('You clicked ' + item +'\n'+'with key ' + key);
+    Alert.alert('You clicked ' + item + '\n' + 'with key ' + key);
     props.removeItem(key);
   }
 
@@ -428,6 +432,7 @@ const styles = StyleSheet.create({
     fontFamily: "Cochin",
     marginLeft: 40,
     paddingTop: 10
+
   },
   button2: {
     textAlign: "center",
@@ -523,9 +528,9 @@ const styles = StyleSheet.create({
     width: "80%",
     color: '#344953',
     justifyContent: 'center',
-    marginTop:50,
-    marginBottom:90,
-    fontSize:20
+    marginTop: 50,
+    marginBottom: 90,
+    fontSize: 20
   },
   containerPicker: {
     flex: 1,
