@@ -48,7 +48,6 @@ export default function ItemsScreen({ navigation }) {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
           keyExtractor={item => item.id} />
-        <Button title = 'Click here to add items to your list!' onPress = {() => navigation.navigate('Add items')} />
       </View>
     );
 }
