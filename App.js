@@ -245,6 +245,17 @@ function LocateStackScreen() {
   );
 }
 
+// const ItemsStack = createStackNavigator();
+
+// function ItemsStackScreen() {
+//   return (
+//     <ItemsStack.Navigator>
+//       <ItemsStack.Screen name="My Lists" component={ListScreen} options={{ headerShown: false }} />
+//       <ItemsStack.Screen name="Add Items" component={AddItemsScreen} />
+//     </ItemsStack.Navigator>
+//   );
+// }
+
 const Tab = createBottomTabNavigator();
 const store = createStore(itemsReducer);
 
