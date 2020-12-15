@@ -245,16 +245,16 @@ function LocateStackScreen() {
   );
 }
 
-// const ItemsStack = createStackNavigator();
+const ItemsStack = createStackNavigator();
 
-// function ItemsStackScreen() {
-//   return (
-//     <ItemsStack.Navigator>
-//       <ItemsStack.Screen name="My Lists" component={ListScreen} options={{ headerShown: false }} />
-//       <ItemsStack.Screen name="Add Items" component={AddItemsScreen} />
-//     </ItemsStack.Navigator>
-//   );
-// }
+function ItemsStackScreen() {
+  return (
+    <ItemsStack.Navigator>
+      <ItemsStack.Screen name="My Lists" component={ListScreen} options={{ headerShown: false }} />
+      <ItemsStack.Screen name="Add Items" component={AddItemsScreen} />
+    </ItemsStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator();
 const store = createStore(itemsReducer);
@@ -297,8 +297,8 @@ function App() {
           <Tab.Screen name="All Items" component={ItemsScreen} />
           <Tab.Screen name="Search" component={SearchScreen} />
           <Tab.Screen name="Locate" component={LocateStackScreen} />
-          <Tab.Screen name="My Lists" component={ListScreen} />
-          <Tab.Screen name="Add Items" component={AddItemsScreen} />
+          <Tab.Screen name="My Lists" component={ItemsStackScreen} />
+          {/* <Tab.Screen name="Add Items" component={AddItemsScreen} /> */}
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>
