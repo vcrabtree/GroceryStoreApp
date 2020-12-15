@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, TouchableHighlight, Modal, Keyboard, SafeAreaView, ScrollView, TouchableWithoutFeedback, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, TouchableHighlight, Modal, ScrollView, Image, Alert,  Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { MapView, Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
@@ -293,3 +292,5 @@ function App() {
     </Provider>
   );
 }
+
+export default App;
