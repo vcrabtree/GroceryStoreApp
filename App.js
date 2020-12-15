@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MapView from 'react-native-maps';
+//import MapView from 'react-native-maps';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { connect } from 'react-redux';
@@ -8,10 +8,11 @@ import { removeItem } from './ItemsActions';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Keyboard, SafeAreaView, ScrollView, TouchableWithoutFeedback, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import { Marker } from 'react-native-maps';
-import { NavigationContainer } from '@react-navigation/native';
+//import { Marker } from 'react-native-maps';
+import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AddItemsScreen from './MyList';
 
 // You can import Ionicons from @expo/vector-icons/Ionicons if you use Expo or
 // react-native-vector-icons/Ionicons otherwise.
@@ -61,6 +62,8 @@ const data = [
     id: Math.floor(Math.random() * 100) + 1
   }
 ];
+
+const MyList = [ ]
 
 function UselessTextInput(props) {
   return (
@@ -313,18 +316,39 @@ function MapScreen({ navigation }) {
   );
 }
 
-function ListScreen({ navigation }) {
-
-  const _onPressButton = (key, item) => {
-    Alert.alert('You clicked ' + item + '\n' + 'with key ' + key);
-    props.removeItem(key);
-  }
-
-
+function ListScreen({ navigation, props }) {
+  const mapStateToProps = (state) => {
+    const { items } = state
+    return { items }
+    };
+  
+  const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+      removeItem,
+    }, dispatch)
+  );
+  
+  connect(mapStateToProps, mapDispatchToProps)(App);
+  
   return (
-    <View style={styles.container2}>
-      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
-      <Text style={styles.heading2}>List Screen</Text>
+    <View style={styles.container}>
+      <Text> Add items here! </Text>
+      {
+        props.items.possible.map((item, index) => (
+          <Button
+            key={item}
+            title={`Add ${item}`}
+            onPress={() => props.addItem(index)
+            }
+          />
+        ))
+      }
+      <Button
+        title="Back to home"
+        onPress={() =>
+          props.navigation.navigate('Home')
+        }
+      />
     </View>
   );
 }
@@ -380,6 +404,7 @@ export default function App(props) {
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Locate" component={LocateStackScreen} />
         <Tab.Screen name="My Lists" component={ListScreen} />
+        <Tab.Screen name="Add items" component={AddItemsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -541,17 +566,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-// const mapStateToProps = (state) => {
-//   const { items } = state
-//   return { items }
-// };
-
-// const mapDispatchToProps = dispatch => (
-//   bindActionCreators({
-//     removeItem,
-//   }, dispatch)
-// );
-
-// export default connect(mapStateToProps, mapDispatchToProps)(App);
