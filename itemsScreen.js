@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Text, View, Image, FlatList} from 'react-native';
+import { Alert, Text, View, Image, FlatList, Button} from 'react-native';
 import { styles } from './styles'
 import { data } from './data'
 
@@ -29,7 +29,6 @@ export default function ItemsScreen({ navigation }) {
       Alert.alert('Item: ' + item.groceryItem + '\n' + 'Price: ' + item.price + '\n' + 'Category: ' + item.category + '\n' + 'Item #: ' + item.id + '\n')
     };
 
-
     const renderItem = ({ item }) => (
       <View style={styles.listItem}>
         <Image
@@ -49,6 +48,7 @@ export default function ItemsScreen({ navigation }) {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
           keyExtractor={item => item.id} />
+        <Button title = 'Click here to add items to your list!' onPress = {() => navigation.navigate('Add items')} />
       </View>
     );
 }
