@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Text, View, TextInput, TouchableOpacity, ScrollView, Image, Alert, Slider, Picker } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, TouchableHighlight, Modal, Keyboard, SafeAreaView, ScrollView, TouchableWithoutFeedback, Button, Image, FlatList, Alert, Dimensions, Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { MapView, Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,7 +32,7 @@ function UselessTextInput(props) {
   );
 }
 
-function SearchScreen({ navigation }) {
+function SearchScreen({ navigation, route }) {
   const [nameInput, setNameInput] = useState('');
   const [itemNoInput, setItemNoInput] = useState('');
   const [categoryInput, setCategoryInput] = useState('');
@@ -40,18 +41,21 @@ function SearchScreen({ navigation }) {
 
   const [sliderValue, setSliderValue] = useState(15.49);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [max, setMax] = useState(49.99);
   const [min, setMin] = useState(0.99);
 
   const [itemsList, setItemsList] = useState(data);
-
-
   const searchItem = () => {
-    navigation.navigate('SearchScreen', { post: JSON.stringify({ text: nameInput, }) });
-    if (nameInput == "" || itemNoInput == "") {
+    if (nameInput === "") {
       Alert.alert("At least an input is empty.");
-    } else if (itemsList.filter(item => item.groceryItem == nameInput)) {
-      Alert.alert("Item " + nameInput + " has been found.");
+    }
+    else if (itemFound()) {
+      Alert.alert(nameInput + " has been found." + '\n' + 'You want to add it in the list?' + "\n" + "If yes, click on the modal below.");
+    }
+    else if(!itemFound()){
+      Alert.alert(nameInput +" isn't available. Sorry!");
     }
   };
 
@@ -60,7 +64,7 @@ function SearchScreen({ navigation }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps={'always'}>
-        <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+        <Text style={styles.heading11}>JIV'S GROCERIES</Text>
         <Text style={styles.heading2}>Advanced Search</Text>
         <View style={{
           flex: 0,
@@ -68,37 +72,37 @@ function SearchScreen({ navigation }) {
           justifyContent: 'space-between', width: 250, height: 450, backgroundColor: 'olivedrab', padding: 20,
         }}>
 
-            <Text style={styles.searchText}>Name:</Text>
-            <UselessTextInput
-              multiline
-              numberOfLines={4}
-              value={nameInput}
-              onChangeText={itemText => setNameInput(itemText)}
-            />
-            <Text style={styles.searchText}>Item No.:</Text>
-            <UselessTextInput
-              keyboardType='numeric'
-              multiline
-              numberOfLines={4}
-              value={itemNoInput}
-              onChangeText={itemText => setItemNoInput(itemText)}
-            />
-            <Text style={styles.searchText3}>Category:</Text>
-            <View style={styles.containerPicker}>
-              <Picker style={styles.pickerStyle}
-                selectedValue={categoryInput}
-                onValueChange={(itemValue) =>
-                  setCategoryInput(itemValue)}
-              >
-                <Picker.Item label="Dairy" value="dairy" />
-                <Picker.Item label="Produce" value="produce" />
-                <Picker.Item label="Meat & Seafood" value="meats" />
-                <Picker.Item label="Beer & Wine" value="bw" />
-                <Picker.Item label="Condiments" value="con" />
-                <Picker.Item label="Candy & Snacks" value="cs" />
-                <Picker.Item label="Baking" value="bake" />
-              </Picker>
-            </View>
+          <Text style={styles.searchText}>Name:</Text>
+          <UselessTextInput
+            multiline
+            numberOfLines={4}
+            value={nameInput}
+            onChangeText={itemText => setNameInput(itemText)}
+          />
+          <Text style={styles.searchText}>Item No.:</Text>
+          <UselessTextInput
+            keyboardType='numeric'
+            multiline
+            numberOfLines={4}
+            value={itemNoInput}
+            onChangeText={itemText => setItemNoInput(itemText)}
+          />
+          <Text style={styles.searchText3}>Category:</Text>
+          <View style={styles.containerPicker}>
+            <Picker style={styles.pickerStyle}
+              selectedValue={categoryInput}
+              onValueChange={(itemValue) =>
+                setCategoryInput(itemValue)}
+            >
+              <Picker.Item label="Dairy" value="dairy" />
+              <Picker.Item label="Produce" value="produce" />
+              <Picker.Item label="Meat & Seafood" value="meats" />
+              <Picker.Item label="Beer & Wine" value="bw" />
+              <Picker.Item label="Condiments" value="con" />
+              <Picker.Item label="Candy & Snacks" value="cs" />
+              <Picker.Item label="Baking" value="bake" />
+            </Picker>
+          </View>
 
           <View />
           <Text style={styles.searchText}>
@@ -130,6 +134,7 @@ function SearchScreen({ navigation }) {
             <Text style={styles.searchText2}>Show items available</Text>
           </View>
         </View>
+
         <View>
           <TouchableOpacity
             onPress={searchItem}
@@ -138,6 +143,35 @@ function SearchScreen({ navigation }) {
           </TouchableOpacity>
 
         </View>
+
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Item added succesfully.</Text>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#A5C9FA" }}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <Text style={styles.textStyle}>X</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+          <TouchableHighlight
+            style={styles.openButton}
+            onPress={() => {
+              setModalVisible(true);
+            }}>
+            <Text style={styles.textStyle}>Click to add item</Text>
+          </TouchableHighlight>
+        </View>
+
+
       </ScrollView>
     </View>
   );
@@ -146,7 +180,7 @@ function SearchScreen({ navigation }) {
 function LocateScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', backgroundColor: "yellowgreen", paddingTop: 90 }}>
-      <Text style={styles.heading1}>JIV'S GROCERIES</Text>
+      <Text style={styles.heading11}>JIV'S GROCERIES</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate('Map')}>
         <Text style={styles.heading2}>Find Us On The Map!</Text>
@@ -259,5 +293,3 @@ function App() {
     </Provider>
   );
 }
-
-export default App;
