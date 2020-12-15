@@ -10,4 +10,4 @@ export const addItem = itemsIndex => (
     type: 'REMOVE_ITEM',
     payload: itemsIndex,
     }
-    );
+  );
