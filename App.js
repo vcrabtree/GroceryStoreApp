@@ -3,8 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { Text, View, TextInput, TouchableOpacity, TouchableHighlight, Modal, ScrollView, Image, Alert,  Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+/*import { Marker, MapView } from 'react-native-maps';*/
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -266,6 +265,17 @@ function ItemsStackScreen() {
   );
 }
 
+const ListStack = createStackNavigator();
+
+function ListStackScreen() {
+  return (
+    <ListStack.Navigator>
+      <ListStack.Screen name="All Items" component={ItemsScreen} options={{ headerShown: false }} />
+      <ListStack.Screen name="Add Items" component={AddItemsScreen} />
+    </ListStack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 const store = createStore(itemsReducer);
 
@@ -304,11 +314,10 @@ function App() {
           }}
         >
           <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="All Items" component={ItemsScreen} />
+          <Tab.Screen name="All Items" component={ListStackScreen} />
           <Tab.Screen name="Search" component={SearchScreen} />
           <Tab.Screen name="Locate" component={LocateStackScreen} />
           <Tab.Screen name="My Lists" component={ItemsStackScreen} />
-          {/* <Tab.Screen name="Add Items" component={AddItemsScreen} /> */}
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>

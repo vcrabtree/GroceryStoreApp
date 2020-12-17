@@ -1,9 +1,9 @@
 import React from 'react';
-import { Alert, Text, View, Image, FlatList, Button} from 'react-native';
+import { Alert, Text, View, Image, FlatList, TouchableOpacity} from 'react-native';
 import { styles } from './styles'
 import { data } from './data'
 
-export default function ItemsScreen({ navigation }) {
+export default function ItemsScreen(props) {
 
     const ItemView = ({ item }) => {
       return (
@@ -48,6 +48,10 @@ export default function ItemsScreen({ navigation }) {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
           keyExtractor={item => item.id} />
+        <TouchableOpacity
+            onPress={() => props.navigation.navigate('Add Items')}>
+            <Text style={styles.myListText}>Click Here to Add Items to Your List!</Text>
+        </TouchableOpacity>
       </View>
     );
 }

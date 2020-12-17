@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { FlatList, Text, View, Button, Image} from 'react-native';
+import { FlatList, Text, View, Button, Image, TouchableOpacity} from 'react-native';
 import { addItem } from './ItemsActions';
 
 import { styles } from './styles'
@@ -39,6 +39,10 @@ function AddItemsScreen(props) {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
           keyExtractor={item => item.id} />
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('My Lists')}>
+          <Text style={styles.myListText}>Click Here to view Your List!</Text>
+        </TouchableOpacity>
       </View>
     );
 }

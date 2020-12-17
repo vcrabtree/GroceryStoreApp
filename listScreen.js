@@ -7,7 +7,7 @@ import { removeItem } from './ItemsActions';
 import { styles } from './styles'
 import { data } from './data';
 
-function ListScreen(props, { navigation }) {
+function ListScreen(props) {
     const ItemView = ({ item, index }) => {
         return (
           <View style={styles.listItem}>
@@ -40,7 +40,7 @@ function ListScreen(props, { navigation }) {
           renderItem={ItemView}
           keyExtractor={item => item.id} />
           <TouchableOpacity
-            onPress={() => navigation.navigate('Add Items')}>
+            onPress={() => props.navigation.navigate('Add Items')}>
             <Text style={styles.myListText}>Click Here to Add Items to Your List!</Text>
           </TouchableOpacity>
       </View>
