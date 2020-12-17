@@ -59,6 +59,14 @@ function SearchScreen({ navigation, route }) {
     }
   };
 
+  function itemFound() {
+    for (let item of itemsList) {
+        if (item.groceryItem === nameInput)
+            return true;
+    }
+    return false;
+}
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "yellowgreen", paddingTop: 70 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}
@@ -83,6 +91,7 @@ function SearchScreen({ navigation, route }) {
           <UselessTextInput
             keyboardType='numeric'
             multiline
+            keyboardType="number"
             numberOfLines={4}
             value={itemNoInput}
             onChangeText={itemText => setItemNoInput(itemText)}
@@ -170,8 +179,6 @@ function SearchScreen({ navigation, route }) {
             <Text style={styles.textStyle}>Click to add item</Text>
           </TouchableHighlight>
         </View>
-
-
       </ScrollView>
     </View>
   );

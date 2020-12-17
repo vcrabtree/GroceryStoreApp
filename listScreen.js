@@ -41,7 +41,7 @@ function ListScreen(props, { navigation }) {
           keyExtractor={item => item.id} />
           <TouchableOpacity
             onPress={() => navigation.navigate('Add Items')}>
-            <Text style={styles.heading2}>Click Here to Add Items to Your List!</Text>
+            <Text style={styles.myListText}>Click Here to Add Items to Your List!</Text>
           </TouchableOpacity>
       </View>
     );
