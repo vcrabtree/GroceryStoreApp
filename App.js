@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { Text, View, TextInput, TouchableOpacity, TouchableHighlight, Modal, ScrollView, Image, Alert,  Slider, Picker } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-/*import { Marker, MapView } from 'react-native-maps';*/
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
