@@ -193,7 +193,10 @@ function LocateScreen({ navigation }) {
         <Text style={styles.heading2}>Find Us On The Map!</Text>
       </TouchableOpacity>
       <Text>{'\n'}</Text>
-      <Image source={require('./assets/storeMap.png')} style={{ width: 350, height: 350 }} />
+      <TouchableOpacity
+          onPress={() => Alert.alert("Check out the All Items Tab to Find What Items are Available!")}>
+          <Image source={require('./assets/storeMap.png')} style={{ width: 350, height: 350 }} />
+        </TouchableOpacity>
       <Text>{'\n'}</Text>
     </View>
   );
